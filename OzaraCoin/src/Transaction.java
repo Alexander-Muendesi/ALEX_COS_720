@@ -13,11 +13,15 @@ public class Transaction {
         return this.sender;
     }
 
-    public String receiver(){
+    public String getReceiver(){
         return this.receiver;
     }
 
-    public double amount(){
+    public double getAmount(){
         return this.amount;
+    }
+
+    public String getData(){
+        return getSender() + " " + getReceiver() + " " + getAmount(); 
     }
 }

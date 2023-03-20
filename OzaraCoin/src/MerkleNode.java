@@ -1,26 +1,28 @@
 public class MerkleNode {
-    private String value;//value of the Hash
+    private String hash;//value of the Hash
     private MerkleNode left;
     private MerkleNode right;
 
+    public MerkleNode(){}
+
     /**
      * Constructor to initialize the value attribute only whilst setting left and right to null
-     * @param value The value of the computed hash
+     * @param hash The value of the computed hash
      */
-    public MerkleNode(String value){
-        this.value = value;
+    public MerkleNode(String hash){
+        this.hash = hash;
         left = null;
         right = null;
     }
 
     /**
      * Constructor to initialize all the attributes of the class
-     * @param value Value of the hash
+     * @param hash Value of the hash
      * @param left left child of current node
      * @param right Right child of current node
      */
-    public MerkleNode(String value, MerkleNode left, MerkleNode right){
-        this.value = value;
+    public MerkleNode(String hash, MerkleNode left, MerkleNode right){
+        this.hash = hash;
         this.left = left;
         this.right = right;
     }
@@ -29,16 +31,16 @@ public class MerkleNode {
      * Getter method for value
      * @return value of hash
      */
-    public String getValue(){
-        return this.value;
+    public String getHash(){
+        return this.hash;
     }
 
     /**
      * Setter method for value
-     * @param value new value of hash
+     * @param hash new value of hash
      */
-    public void setValue(String value){
-        this.value = value;
+    public void setHash(String hash){
+        this.hash = hash;
     }
 
     /**
