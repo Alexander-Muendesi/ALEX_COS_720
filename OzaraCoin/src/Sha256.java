@@ -11,7 +11,7 @@ public class Sha256 {
      * @param data The transaction data in the form of a string to be hashed
      * @return The hash value as a string
      */
-    public String sha256(String data){
+    public String hash(String data){
         MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("SHA-256");
