@@ -1,3 +1,5 @@
+//need to implement a way to sign a transaction with a digital transaction to 
+//ensure its authenticity
 public class Transaction {
     private String sender;
     private String receiver;
