@@ -83,4 +83,20 @@ public class Peer {
         this.clientSockets.add(socket);
         System.out.println("Connected to peer " + peerAddress + ":" + peerPort);
     }
+
+    /**
+     * This method broadcasts a newly mined block to all Peers in the blockchain
+     * @param block Newly mined block
+     */
+    public void broadcast(Block block){
+
+    }
+    
+    /**
+     * This method broadcasts a new transaction to other Peers on the network
+     * @param transaction A newly created transaction
+     */
+    public void broadcast(Transaction transaction){
+
+    }
 }
