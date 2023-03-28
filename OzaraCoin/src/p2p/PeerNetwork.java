@@ -23,8 +23,13 @@ public class PeerNetwork{
         if(peers.size() > 1){
             for(Peer peerr : peers){
                 if(peerr != peer){
-                    peer.connectToPeer(peerr);
-                    peerr.connectToPeer(peer);
+                    try{
+                        peer.connectToPeer(peerr.getAddress(),peer.getPort());
+                        peerr.connectToPeer(peer.getAddress(),peer.getPort());
+                    }
+                    catch(IOException e){
+                        e.printStackTrace();
+                    }
                 }
             }
         }
