@@ -1,11 +1,10 @@
+import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.util.Date;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        String data = "hello world";
-        long r = System.currentTimeMillis();
+        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");//pass this a parameter to Peers
 
-        System.out.println(Long.toString(r));
     }
 }
