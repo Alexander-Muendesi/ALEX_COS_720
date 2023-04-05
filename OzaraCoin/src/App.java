@@ -21,10 +21,13 @@ public class App {
         peer2.startServer();
         Peer peer3 = new Peer("localhost", 9002, random, mem, random2);
         peer3.startServer();
+        Peer peer4 = new Peer("localhost", 9003, random, mem, random2);
+        peer4.startServer();
         
-        pn.addPeer(peer3);
-        pn.addPeer(peer2);
         pn.addPeer(peer1);
+        pn.addPeer(peer2);
+        pn.addPeer(peer3);
+        pn.addPeer(peer4);
 
     }
 }

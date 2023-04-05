@@ -46,6 +46,14 @@ public class Block {
         this.hash = hasher.hash(data);
     }
 
+    public String getTimeStamp(){
+        return Long.toString(timestamp);
+    }
+
+    public String getNonce(){
+        return Integer.toString(nonce);
+    }
+
     public String getHash(){
         return this.hash;
     }
@@ -62,6 +70,14 @@ public class Block {
         this.prevHash = prevHash;
     }
 
+    public MerkleTree getTree(){
+        return this.tree;
+    }
+
+    public int getDifficulty(){
+        return this.difficulty;
+    }
+
     /**
      * This method mines a new block. The goal is to find a hash that starts "difficulty" many 0's.
      * Takes inspiration from Bitcoin.
@@ -70,8 +86,8 @@ public class Block {
         //the process of creating a new block of transactions through solving a cryptographic puzzle.
         String target = new String(new char[difficulty]).replace('\n','0');
         while(!hash.substring(0,difficulty).equals(target)){
-            nonce++;
             mininingCalculatHash();
+            nonce++;
         }
         System.out.println("Block mined");
     }
