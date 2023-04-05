@@ -1,4 +1,4 @@
-package Blockchainn;
+package Blockchain;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;

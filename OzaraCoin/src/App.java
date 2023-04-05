@@ -1,18 +1,30 @@
 import java.security.SecureRandom;
-import java.sql.Timestamp;
-import java.util.Date;
+import java.util.Random;
 
-import Blockchainn.Transaction;
+import Blockchain.Mempool;
+import Blockchain.Transaction;
+import PeerToPeer.Peer;
+import PeerToPeer.PeerNetwork;
 
 
 public class App {
     public static void main(String[] args) throws Exception {
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");//pass this a parameter to Peers
+        Random random2 = new Random(6079);
 
-        Transaction one = new Transaction("Alex", "John", 20, 10, "tttt", "dfdf");
-        Transaction two = new Transaction("Alex2", "John2", 202, 120, "ttt222t", "d22f22df");
+        Mempool mem = new Mempool();
+        PeerNetwork pn = new PeerNetwork();
 
+        Peer peer1 = new Peer("localhost", 9000, random, mem, random2);
+        peer1.startServer();
+        Peer peer2 = new Peer("localhost", 9001, random, mem, random2);
+        peer2.startServer();
+        Peer peer3 = new Peer("localhost", 9002, random, mem, random2);
+        peer3.startServer();
         
+        pn.addPeer(peer3);
+        pn.addPeer(peer2);
+        pn.addPeer(peer1);
 
     }
 }

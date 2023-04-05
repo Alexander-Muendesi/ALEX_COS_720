@@ -25,9 +25,9 @@ public class PeerNetwork{
 
         if(peers.size() > 1){
             for(Peer peerr : peers){
-                if(peerr != peer){
+                if(peerr.getPort() != peer.getPort()){
                     try{
-                        peer.connectToPeer(peerr.getAddress(),peer.getPort());
+                        peer.connectToPeer(peerr.getAddress(),peerr.getPort());
                         peerr.connectToPeer(peer.getAddress(),peer.getPort());
                     }
                     catch(IOException e){

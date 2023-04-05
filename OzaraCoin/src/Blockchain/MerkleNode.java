@@ -1,4 +1,4 @@
-package Blockchainn;
+package Blockchain;
 
 
 public class MerkleNode {

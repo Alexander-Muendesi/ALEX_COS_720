@@ -1,4 +1,4 @@
-package Blockchainn;
+package Blockchain;
 
 import java.util.List;
 
@@ -8,7 +8,8 @@ public class Blockchain {
     List<Block> blockchain;
 
     public boolean isChainValid(){
-
+        //TODO: fix this method by adding some methods to check that the chain is valid
+        return true;//stub
     }
 
     public void addBlock(Block block){

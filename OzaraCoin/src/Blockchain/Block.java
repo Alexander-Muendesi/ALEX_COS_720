@@ -1,4 +1,4 @@
-package Blockchainn;
+package Blockchain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,10 @@ public class Block {
 
     private final Sha256 hasher;
 
+    /**
+     * Constructor which takes as a parameter the previous hash of a block.
+     * @param prevHash
+     */
     public Block(String prevHash){
         this.prevHash = prevHash;
         timestamp = System.currentTimeMillis();

@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import Blockchainn.Block;
-import Blockchainn.Mempool;
-import Blockchainn.Transaction;
+import Blockchain.Block;
+import Blockchain.Mempool;
+import Blockchain.Transaction;
 
 //acts as a Peer Node in the cryptocurrency network
 //This will be an unstructured P2P network
@@ -88,7 +88,7 @@ public class Peer {
                 try{
                     Socket clientSocket = this.serverSocket.accept();
                     this.clientSockets.add(clientSocket);
-                    System.out.println("Client connected from " + clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort());
+                    System.out.println("Client connected from " + clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort() + "\n");
                 }
                 catch(IOException e){
                     e.printStackTrace();
@@ -120,9 +120,10 @@ public class Peer {
      * @throws IOException
      */
     public void connectToPeer(String peerAddress, int peerPort) throws IOException{
+        // System.out.println("Port: " + port + " peerPort: " + peerPort);
         Socket socket = new Socket(peerAddress, peerPort);
         this.clientSockets.add(socket);
-        System.out.println("Connected to peer " + peerAddress + ":" + peerPort);
+        System.out.println(port + " Connected to peer " + peerAddress + ":" + peerPort + "\n");
     }
 
     /**
