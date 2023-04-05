@@ -1,3 +1,6 @@
+package Blockchainn;
+
+
 public class MerkleNode {
     private String hash;//value of the Hash
     private MerkleNode left;

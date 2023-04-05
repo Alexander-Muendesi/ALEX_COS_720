@@ -1,3 +1,5 @@
+package PeerToPeer;
+
 import java.io.IOError;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+
+import Blockchainn.Block;
+import Blockchainn.Mempool;
+import Blockchainn.Transaction;
 
 //acts as a Peer Node in the cryptocurrency network
 //This will be an unstructured P2P network
@@ -150,7 +156,9 @@ public class Peer {
     public Transaction createTransaction(){
         String transactionId = UUID.randomUUID().toString();
         String sender = this.address;
-        double fee = calculateTransactionFees();
+        //TODO: Fix the below fee stuff as well as making it return the proper thing
+        // double fee = calculateTransactionFees();//this needs fixing
+        return null;
     }
 
     double calculateTransactionFees(Transaction transaction){
