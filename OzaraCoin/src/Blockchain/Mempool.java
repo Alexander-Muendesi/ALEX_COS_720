@@ -13,9 +13,13 @@ public class Mempool {
         this.blockchain = blockchain;
     }
 
-    public void addTransaction(Transaction transaction){
-        if(isValidTransaction(transaction))
+    public boolean addTransaction(Transaction transaction){
+        if(isValidTransaction(transaction)){
             transactions.add(transaction);
+            return true;
+        }
+        else
+            return false;
     }
 
     public void removeTransaction(Transaction transaction){
@@ -34,7 +38,7 @@ public class Mempool {
      */
     private Boolean isValidTransaction(Transaction transaction){
         //check all required fields are present
-        if(transaction.getSender() == null || transaction.getReceiver() == null || transaction.getAmount() <=0 || transaction.getFee() <= 0 || 
+        if(transaction.getSender() == null || transaction.getReceiver() == null || transaction.getAmount() <=0 || 
             transaction.getTrasactionId() == null){
 
             return false;

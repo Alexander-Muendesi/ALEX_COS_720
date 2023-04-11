@@ -13,7 +13,7 @@ public class Block {
     private Long timestamp;
     private int nonce;
 
-    private final int maxTransactions = 5000;
+    private final int maxTransactions = 2000;
     private List<Transaction> transactions;
 
     private final Sha256 hasher;
@@ -41,7 +41,7 @@ public class Block {
         this.hash = hasher.hash(data);
     }
 
-    public void mininingCalculatHash(){
+    public void mininingCalculateHash(){
         String data = prevHash + tree.getRootHash() + Long.toString(timestamp) + Integer.toString(nonce);
         this.hash = hasher.hash(data);
     }
@@ -78,6 +78,9 @@ public class Block {
         return this.difficulty;
     }
 
+    public void setDifficulty(int difficulty){
+        this.difficulty = difficulty;
+    }
     /**
      * This method mines a new block. The goal is to find a hash that starts "difficulty" many 0's.
      * Takes inspiration from Bitcoin.
@@ -86,10 +89,10 @@ public class Block {
         //the process of creating a new block of transactions through solving a cryptographic puzzle.
         String target = new String(new char[difficulty]).replace('\n','0');
         while(!hash.substring(0,difficulty).equals(target)){
-            mininingCalculatHash();
+            mininingCalculateHash();
             nonce++;
         }
-        System.out.println("Block mined");
+        System.out.println("Block mined!");
     }
 
     /**
@@ -103,5 +106,9 @@ public class Block {
             return true;
         }
         return false;
+    }
+
+    public List<Transaction> getTransactions(){
+        return this.transactions;
     }
 }

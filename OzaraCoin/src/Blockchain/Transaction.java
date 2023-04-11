@@ -5,6 +5,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -17,21 +20,35 @@ public class Transaction {
     private final String sender;
     private final String receiver;
     private final double amount;
-    private final double fee;
     private final String transactionId;
     private final String transactionSignature;
     private final PublicKey senderPublicKey;
+    private final PublicKey receiverPublicKey;
 
-    public Transaction(String sender, String receiver, double amount,double fee, String transactionId,String transactionSignature, PublicKey senderPublicKey){
-        this.sender = sender;
-        this.receiver = receiver;
+    /**
+     * 
+     * @param amount
+     * @param transactionId
+     * @param transactionSignature
+     * @param senderPublicKey
+     * @param receiverPublicKey
+     * @param senderAddress
+     * @param receiverAddress
+     */
+    public Transaction(double amount, String transactionId,String transactionSignature, 
+                        PublicKey senderPublicKey, PublicKey receiverPublicKey, String senderAddress, String receiverAddress){
+        // this.sender = sender;
+        this.sender = senderAddress;
+        // this.receiver = receiver;
+        this.receiver = receiverAddress;
         this.amount = amount;
 
-        this.fee = fee;
         this.transactionId = transactionId;
         this.transactionSignature = transactionSignature;
 
         this.senderPublicKey = senderPublicKey;
+        this.receiverPublicKey = receiverPublicKey;
+
     }
 
     public String getSender(){
@@ -46,10 +63,6 @@ public class Transaction {
         return this.amount;
     }
 
-    public double getFee(){
-        return this.fee;
-    }
-
     public String getTrasactionId(){
         return this.transactionId;
     }
@@ -59,8 +72,7 @@ public class Transaction {
     }
 
     public String getData(){
-        return getSender() + " " + getReceiver() + " " + getAmount() +
-        getFee() + " " + getTrasactionId() + " " + getTransactionSignature(); 
+        return getSender() + " " + getReceiver() + " " + getAmount() + " " + getTrasactionId(); 
     }
 
     /**
@@ -78,7 +90,7 @@ public class Transaction {
         byte[] encryptedData = transactionSignature.getBytes();
 
         try {
-            Cipher cipher = Cipher.getInstance("DSA");
+            Cipher cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.DECRYPT_MODE, senderPublicKey);
 
             byte[] decryptedData = cipher.doFinal(encryptedData);

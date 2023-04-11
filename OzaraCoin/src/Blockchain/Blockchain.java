@@ -1,5 +1,6 @@
 package Blockchain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //need to set upper limit on number of OzaraCoins than can exist. 
@@ -10,6 +11,7 @@ public class Blockchain {
 
     public Blockchain(){
         this.sha256 = new Sha256();
+        blockchain = new ArrayList<Block>();
     }
 
     /**
@@ -19,7 +21,7 @@ public class Blockchain {
      * step 2: Check the PoW. verifies that the PoW algorithm has been executed correctly for each block
      * step 3: Validate Transactions: by verifying the digital signatures and that the sender has enough funds to complete
      *          the transaction.
-     * step 4: Check the consensus: verify that the blockchain is consenus by with other peers in the network by comparing
+     * step 4: Check the consensus: verify that the blockchain is in consenus with other peers in the network by comparing
      *          the blockchain of the peer with the other peers in the network and ensuring that they all agree on the longest chain
      * Step5: Check for double spending. Ensure that there are no double spending attempts within the blockchain. If a transaction has
      *          been included in a block it cannot be included in another block
@@ -67,15 +69,19 @@ public class Blockchain {
             else
                 counter++;
         }
-        //step 3
-
+        //step 3: Done when transactions are being added to the block
+        
         //step 4
 
-        //step 5
+        //step 5: Done already in mempool
         return true;//stub
     }
 
     public void addBlock(Block block){
         blockchain.add(block);
+    }
+
+    public List<Block> getBlockchain(){
+        return this.blockchain;
     }
 }

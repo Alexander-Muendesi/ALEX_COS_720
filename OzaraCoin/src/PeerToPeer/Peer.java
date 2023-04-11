@@ -11,9 +11,12 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+
+import javax.crypto.Cipher;
 
 import Blockchain.Block;
 import Blockchain.Mempool;
@@ -35,7 +38,7 @@ public class Peer {
     private final PublicKey publicKey;
 
     private Mempool mempool;
-    private final int BLOCK_SIZE_LIMIT = 5000;
+    private final int BLOCK_SIZE_LIMIT = 2000;
     private final Random random2;
 
     //https://www.javatpoint.com/java-digital-signature
@@ -156,7 +159,9 @@ public class Peer {
      */
     public Transaction createTransaction(){
         String transactionId = UUID.randomUUID().toString();
-        String sender = this.address;
+        String sender = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+        double amount = random2.nextInt(10);//generate a random amount between 0 and 10
+
         //TODO: Fix the below fee stuff as well as making it return the proper thing
         // double fee = calculateTransactionFees();//this needs fixing
         return null;
@@ -204,4 +209,31 @@ public class Peer {
         double ratio = (double)transactionSize * ((double)priority / 10.0);
         return ratio;
     }
+
+    /**
+     * This method encrypts the data of the transaction with the senders private key
+     * @param sender
+     * @param receiver
+     * @param amount
+     * @param fee
+     * @param transactionId
+     * @return the digital signature as a string
+     */
+    private String generateTransactionSignature(String sender, String receiver, String amount, String fee, String transactionId){
+        String data = sender + " " + receiver + " " + amount + " " + fee + " " + transactionId;
+        String result = "";
+
+        try {
+            Cipher cipher = Cipher.getInstance("DSA");
+            cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+            byte[] encryptedData = cipher.doFinal(data.getBytes());
+            result = new String(encryptedData);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
 }
