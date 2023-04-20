@@ -87,13 +87,17 @@ public class Transaction {
         Sha256 sha256 = new Sha256();
         String hash = sha256.hash(getData());
 
-        byte[] encryptedData = transactionSignature.getBytes();
+        // byte[] encryptedData = transactionSignature.getBytes();
+        byte[] encryptedData = Base64.getDecoder().decode(transactionSignature);
 
         try {
-            Cipher cipher = Cipher.getInstance("RSA");
+            // Cipher cipher = Cipher.getInstance("RSA");
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.DECRYPT_MODE, senderPublicKey);
 
             byte[] decryptedData = cipher.doFinal(encryptedData);
+            // String result = new String(decryptedData);
+            // String result = Base64.getEncoder().encodeToString(decryptedData);
             String result = new String(decryptedData);
 
             if(!hash.equals(result))
@@ -128,7 +132,8 @@ public class Transaction {
         byte[] receiverBytes = sender.getBytes(StandardCharsets.UTF_8);
         byte[] amountBytes = String.valueOf(amount).getBytes(StandardCharsets.UTF_8);
         byte[] transactionIdBytes = transactionId.getBytes(StandardCharsets.UTF_8);
-        byte[] transactionSignatureBytes = transactionSignature.getBytes(StandardCharsets.UTF_8);
+        // byte[] transactionSignatureBytes = transactionSignature.getBytes(StandardCharsets.UTF_8);
+        byte[] transactionSignatureBytes = Base64.getDecoder().decode(transactionSignature);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         

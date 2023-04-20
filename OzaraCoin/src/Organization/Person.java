@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import javax.crypto.Cipher;
 
+import Blockchain.Sha256;
 import Blockchain.Transaction;
 
 public class Person {
@@ -34,7 +35,8 @@ public class Person {
 
         try {
             keygen = KeyPairGenerator.getInstance("RSA");
-            keygen.initialize(1024,secureRandom);
+            // keygen.initialize(1024,secureRandom);
+            keygen.initialize(2048);
             pair = keygen.genKeyPair();
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +62,7 @@ public class Person {
         PublicKey receiverKey = peersKey.get(index);
 
         String transactionSignature = generateTransactionSignature(Double.toString(amount), transactionId, 
-                Base64.getEncoder().encodeToString(pair.getPublic().getEncoded()), Base64.getEncoder().encodeToString(receiverKey.getEncoded()));
+                this.address, receiverAddress);
 
         Transaction t = new Transaction(amount, transactionId, transactionSignature, senderPublicKey, receiverKey, this.address,receiverAddress);
         return t;
@@ -98,13 +100,18 @@ public class Person {
      */
     public String generateTransactionSignature(String amount, String transactionId, String sender, String receiver){
         String data = sender + " " + receiver + " " + amount + " " + transactionId;
+        Sha256 hasher = new Sha256();
+
+        data = hasher.hash(data);
         String result = "";
 
         try{
-            Cipher cipher = Cipher.getInstance("RSA");
+            // Cipher cipher = Cipher.getInstance("RSA");
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, pair.getPrivate());
             byte[] encryptedData = cipher.doFinal(data.getBytes());
-            result = new String(encryptedData);
+            // result = new String(encryptedData);
+            result = Base64.getEncoder().encodeToString(encryptedData);
         }
         catch(Exception e){
             e.printStackTrace();

@@ -108,6 +108,10 @@ public class Block {
         return false;
     }
 
+    public void addTransactions(List<Transaction> transactions){
+        this.transactions = transactions;
+    }
+
     public List<Transaction> getTransactions(){
         return this.transactions;
     }

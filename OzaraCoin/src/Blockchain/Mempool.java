@@ -18,8 +18,9 @@ public class Mempool {
             transactions.add(transaction);
             return true;
         }
-        else
+        else{
             return false;
+        }
     }
 
     public void removeTransaction(Transaction transaction){
@@ -28,6 +29,10 @@ public class Mempool {
 
     public List<Transaction> geTransactions(){
         return this.transactions;
+    }
+
+    public void removeTransactions(){
+        transactions = new ArrayList<Transaction>();
     }
 
     /**
@@ -40,7 +45,6 @@ public class Mempool {
         //check all required fields are present
         if(transaction.getSender() == null || transaction.getReceiver() == null || transaction.getAmount() <=0 || 
             transaction.getTrasactionId() == null){
-
             return false;
         }
 

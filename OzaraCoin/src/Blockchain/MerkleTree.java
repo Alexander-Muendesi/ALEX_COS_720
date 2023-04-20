@@ -33,6 +33,7 @@ public class MerkleTree {
      * @return The root of the tree??
      */
     public MerkleNode buildTree(List<Transaction> transactions){
+        // System.out.println("transaction size: " + transactions.size());
         if(transactions.size() == 1)//there is only one transaction so create a leaf node
             return new MerkleLeaf(transactions.get(0));
 

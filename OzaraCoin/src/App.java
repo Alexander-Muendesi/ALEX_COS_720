@@ -1,6 +1,7 @@
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.util.Random;
 import java.util.UUID;
 
@@ -15,13 +16,17 @@ import PeerToPeer.PeerNetwork;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        //Initialization of blockchain and other small stuff
+
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");//pass this a parameter to Peers
         Random random2 = new Random(6079);
         KeyPair pair = null;
 
         try {
-            KeyPairGenerator keygen = KeyPairGenerator.getInstance("DSA");
-            keygen.initialize(1024,random);
+            KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
+            // keygen.initialize(1024,random);
+            keygen.initialize(2048);
             pair = keygen.genKeyPair();
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,5 +76,39 @@ public class App {
 
         genesisBlock.calculateHash();
         genesisBlock.mineBlock();
+
+        int counter = 1;
+        Block block = new Block(genesisBlock.getHash());
+
+        //simulate some transactions between the users and adding of blocks to the blockchain
+        while(counter <= 10000){
+            if(counter % 2000 == 0){
+                //mine a block
+                block.addTransactions(mempool.geTransactions());
+                block.calculateHash();
+                block.mineBlock();
+                mempool.removeTransactions();
+                blockchain.addBlock(block);
+                block = new Block(block.getHash());
+            }
+            else{//simulate creation of transactions
+                int tempIndex = random.nextInt(3);
+
+                if(tempIndex == 0){
+                    mempool.addTransaction(peter.createTransaction());
+                }
+                else if(tempIndex == 1){
+                    mempool.addTransaction(alice.createTransaction());
+                }
+                else if(tempIndex == 2){
+                    mempool.addTransaction(bob.createTransaction());
+                }
+            }
+            counter++;
+        }
+
+        System.out.println("Blockchain length: " + blockchain.getBlockchain().size());
+
     }
+
 }
