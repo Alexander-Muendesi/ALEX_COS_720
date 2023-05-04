@@ -64,7 +64,6 @@ public class Mempool {
                     senderSpentMoney += transactionTwo.getAmount();
             }
         }
-
         if(senderMoney - senderSpentMoney < transaction.getAmount())//check if the sender can afford to complete the transaction
             return false;
 

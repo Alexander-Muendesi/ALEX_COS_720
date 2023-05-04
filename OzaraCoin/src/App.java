@@ -64,6 +64,7 @@ public class App {
         while(counter <= 10000){
             if(counter % 2000 == 0){
                 //mine a block
+                System.out.println("Block size: " + mempool.geTransactions().size());
                 block.addTransactions(mempool.geTransactions());
                 block.calculateHash();
 
@@ -84,18 +85,21 @@ public class App {
                 int tempIndex = random.nextInt(3);
 
                 if(tempIndex == 0){
-                    mempool.addTransaction(peter.createTransaction());
+                    boolean r = mempool.addTransaction(peter.createTransaction());
+                    if(r)peter.addMoney(peter.lastTransactionAmount * -1);
                 }
                 else if(tempIndex == 1){
-                    mempool.addTransaction(alice.createTransaction());
+                    boolean r = mempool.addTransaction(alice.createTransaction());
+                    if(r)alice.addMoney(-1 * alice.lastTransactionAmount);
                 }
                 else if(tempIndex == 2){
-                    mempool.addTransaction(bob.createTransaction());
+                    boolean r = mempool.addTransaction(bob.createTransaction());
+                    if(r)bob.addMoney(bob.lastTransactionAmount * -1);  
                 }
             }
             counter++;
         }
-
+        System.out.println("Is blockchain valid: " + blockchain.isChainValid());
         System.out.println("Blockchain length: " + blockchain.getBlockchain().size());
 
     }

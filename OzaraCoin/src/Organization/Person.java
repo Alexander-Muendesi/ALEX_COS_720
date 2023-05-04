@@ -25,6 +25,7 @@ public class Person {
 
     private String address = UUID.randomUUID().toString();
     private double money = 0.0;
+    public double lastTransactionAmount = 0.0;
 
 
     public Person(String name,SecureRandom secureRandom, Random random){
@@ -63,7 +64,6 @@ public class Person {
 
     public Transaction createTransaction(){
         double amount = random.nextInt(10);
-        money -= amount;
         String transactionId = UUID.randomUUID().toString();
         PublicKey senderPublicKey = pair.getPublic();
 
@@ -85,7 +85,8 @@ public class Person {
      * @return
      */
     public Transaction getCoinbaseTransaction(PublicKey senderPublicKey, String senderAddress){
-        double amount = random.nextInt(10);
+        double amount = random.nextInt(1000);
+        lastTransactionAmount = amount;
         String transactionId = UUID.randomUUID().toString();
         String receiverAddress = this.address;
         String transactionSignature = generateTransactionSignature(Double.toString(amount), transactionId, 

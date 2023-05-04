@@ -135,7 +135,7 @@ public class Block {
         System.out.println("Block mined!");
 
         Random random = new Random();
-        return random.nextInt(1, 15);//reward a miner with some cryptocurrency in the range 1-15
+        return random.nextInt(1, 150);//reward a miner with some cryptocurrency in the range 1-15
     }
 
     /**
