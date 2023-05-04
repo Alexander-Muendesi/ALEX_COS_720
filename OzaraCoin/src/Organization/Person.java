@@ -24,6 +24,7 @@ public class Person {
     private List<PublicKey> peersKey;
 
     private String address = UUID.randomUUID().toString();
+    private double money = 0.0;
 
 
     public Person(String name,SecureRandom secureRandom, Random random){
@@ -44,6 +45,14 @@ public class Person {
         
     }
 
+    public double getMoney(){
+        return this.money;
+    }
+
+    public void addMoney(double amount){
+        this.money += amount;
+    }
+
     public PublicKey getPublicKey(){
         return pair.getPublic();
     }
@@ -54,6 +63,7 @@ public class Person {
 
     public Transaction createTransaction(){
         double amount = random.nextInt(10);
+        money -= amount;
         String transactionId = UUID.randomUUID().toString();
         PublicKey senderPublicKey = pair.getPublic();
 

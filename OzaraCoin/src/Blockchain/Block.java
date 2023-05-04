@@ -2,6 +2,7 @@ package Blockchain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Block {
     private String hash;
@@ -41,51 +42,90 @@ public class Block {
         this.hash = hasher.hash(data);
     }
 
+    /**
+     * This method is similar to the calculateHash() method above but is used when mining only.
+     */
     public void mininingCalculateHash(){
         String data = prevHash + tree.getRootHash() + Long.toString(timestamp) + Integer.toString(nonce);
         this.hash = hasher.hash(data);
     }
 
+    /**
+     * Getter to return the timestamp of a block
+     * @return String representation of the timestamp value of a block
+     */
     public String getTimeStamp(){
         return Long.toString(timestamp);
     }
 
+    /**
+     * Getter for the current nonce of the block
+     * @return String representation of the nonce value.
+     */
     public String getNonce(){
         return Integer.toString(nonce);
     }
 
+    /**
+     * Getter to return the hash of a block
+     * @return String representation of the hash of a block
+     */
     public String getHash(){
         return this.hash;
     }
 
+    /**
+     * Setter method used to update the hash of a block
+     * @param hash String representation of a hash that was calculated.
+     */
     public void setHash(String hash){
         this.hash = hash;
     }
 
+    /**
+     * Getter to get the previous hash of the current block
+     * @return String representation of the previous hash of a block
+     */
     public String getPrevHash(){
         return this.prevHash;
     }
 
+    /**
+     * Setter method to update the value of the prevHash attribute
+     * @param prevHash String value used to replace the prevHash
+     */
     public void setPrevHash(String prevHash){
         this.prevHash = prevHash;
     }
 
+    /**
+     * Getter method
+     * @return The root of the merkle tree
+     */
     public MerkleTree getTree(){
         return this.tree;
     }
 
+    /**
+     * Getter for the mining difficulty of a block
+     * @return Integer representing the mining difficulty of a block.
+     */
     public int getDifficulty(){
         return this.difficulty;
     }
 
+    /**
+     * Setter method to update the mining difficulty
+     * @param difficulty
+     */
     public void setDifficulty(int difficulty){
         this.difficulty = difficulty;
     }
+
     /**
      * This method mines a new block. The goal is to find a hash that starts "difficulty" many 0's.
-     * Takes inspiration from Bitcoin.
      */
-    public void mineBlock(){
+    public int mineBlock(){
         //the process of creating a new block of transactions through solving a cryptographic puzzle.
         String target = new String(new char[difficulty]).replace('\n','0');
         while(!hash.substring(0,difficulty).equals(target)){
@@ -93,6 +133,9 @@ public class Block {
             nonce++;
         }
         System.out.println("Block mined!");
+
+        Random random = new Random();
+        return random.nextInt(1, 15);//reward a miner with some cryptocurrency in the range 1-15
     }
 
     /**
@@ -108,10 +151,18 @@ public class Block {
         return false;
     }
 
+    /**
+     * Setter to update the list of transactions in the current block
+     * @param transactions
+     */
     public void addTransactions(List<Transaction> transactions){
         this.transactions = transactions;
     }
 
+    /**
+     * Getter method for the list of transaction in the block
+     * @return List representing all the transactions of a block
+     */
     public List<Transaction> getTransactions(){
         return this.transactions;
     }

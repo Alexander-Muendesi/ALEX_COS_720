@@ -8,10 +8,7 @@ import java.util.UUID;
 import Blockchain.Block;
 import Blockchain.Blockchain;
 import Blockchain.Mempool;
-import Blockchain.Transaction;
 import Organization.Person;
-import PeerToPeer.Peer;
-import PeerToPeer.PeerNetwork;
 
 
 public class App {
@@ -32,23 +29,6 @@ public class App {
             e.printStackTrace();
         }
         String founderAddress = UUID.randomUUID().toString();
-
-        // Mempool mem = new Mempool();
-        // PeerNetwork pn = new PeerNetwork();
-
-        // Peer peer1 = new Peer("localhost", 9000, random, mem, random2);
-        // peer1.startServer();
-        // Peer peer2 = new Peer("localhost", 9001, random, mem, random2);
-        // peer2.startServer();
-        // Peer peer3 = new Peer("localhost", 9002, random, mem, random2);
-        // peer3.startServer();
-        // Peer peer4 = new Peer("localhost", 9003, random, mem, random2);
-        // peer4.startServer();
-        
-        // pn.addPeer(peer1);
-        // pn.addPeer(peer2);
-        // pn.addPeer(peer3);
-        // pn.addPeer(peer4);
 
         Block genesisBlock = new Block("Genesis");
         Blockchain blockchain = new Blockchain();//create a central blockchain
@@ -86,7 +66,16 @@ public class App {
                 //mine a block
                 block.addTransactions(mempool.geTransactions());
                 block.calculateHash();
-                block.mineBlock();
+
+                double reward = block.mineBlock();
+                int temp = random2.nextInt(3);
+                if(temp == 0)
+                    peter.addMoney(reward);
+                else if(temp == 1)
+                    alice.addMoney(reward);
+                else
+                    bob.addMoney(reward);
+
                 mempool.removeTransactions();
                 blockchain.addBlock(block);
                 block = new Block(block.getHash());
@@ -110,5 +99,4 @@ public class App {
         System.out.println("Blockchain length: " + blockchain.getBlockchain().size());
 
     }
-
 }

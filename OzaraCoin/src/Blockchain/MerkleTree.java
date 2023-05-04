@@ -28,7 +28,7 @@ public class MerkleTree {
 
     /**
      * This method takes a list of transactions from the block and builds a Merkle Tree
-     * from the transaction data.
+     * from the transaction data. It uses double hashing to create the intermediate hash values as the tree is being built
      * @param transactions List of transactions from a block
      * @return The root of the tree??
      */
@@ -46,7 +46,7 @@ public class MerkleTree {
         MerkleNode right = buildTree(rightList);
 
         //compute intermediate hash value of parent node
-        String hashValue = hasher.hash(left.getHash() + right.getHash());
+        String hashValue = hasher.hash(hasher.hash(left.getHash() + right.getHash()));
 
         //create the parent node
         return new MerkleNode(hashValue,left,right);
