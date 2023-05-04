@@ -3,8 +3,6 @@ package Blockchain;
 import java.util.ArrayList;
 import java.util.List;
 
-//need to set upper limit on number of OzaraCoins than can exist. 
-//something to do with how many coins a miner gets rewarded with etc
 public class Blockchain {
     private List<Block> blockchain;
     private Sha256 sha256;
@@ -21,14 +19,11 @@ public class Blockchain {
      * step 2: Check the PoW. verifies that the PoW algorithm has been executed correctly for each block
      * step 3: Validate Transactions: by verifying the digital signatures and that the sender has enough funds to complete
      *          the transaction.
-     * step 4: Check the consensus: verify that the blockchain is in consenus with other peers in the network by comparing
-     *          the blockchain of the peer with the other peers in the network and ensuring that they all agree on the longest chain
-     * Step5: Check for double spending. Ensure that there are no double spending attempts within the blockchain. If a transaction has
+     * Step4: Check for double spending. Ensure that there are no double spending attempts within the blockchain. If a transaction has
      *          been included in a block it cannot be included in another block
-     * @return
+     * @return True if the blockchain is valid and false if blockchain is not valid
      */
     public boolean isChainValid(){
-        //TODO: fix this method by adding some methods to check that the chain is valid
         int counter = 0;
         Block prev = null;
 
@@ -54,33 +49,42 @@ public class Blockchain {
         for(Block block: blockchain){
             if(counter !=0){
                 String target = new String(new char[block.getDifficulty()]).replace('\n','0');
-                String hash = "";
                 int nonce = 0;
                 String data = block.getPrevHash() + block.getTree().getRootHash() + block.getTimeStamp() + nonce;
+                String hash = sha256.hash(data);
 
                 while(!hash.substring(0,block.getDifficulty()).equals(target)){
                     hash = sha256.hash(data);
                     nonce++;
+                    data = block.getPrevHash() + block.getTree().getRootHash() + block.getTimeStamp() + nonce;
                 }
 
-                if(!hash.equals(block.getHash()))
+                if(!hash.equals(block.getHash())){
                     return false;
+                }
             }
             else
                 counter++;
         }
+
         //step 3: Done when transactions are being added to the block
         
-        //step 4
-
-        //step 5: Done already in mempool
-        return true;//stub
+        //step 4: Done already in mempool
+        return true;
     }
 
+    /**
+     * Method used to add a block to the blockchain
+     * @param block Block to be added to the blockchain
+     */
     public void addBlock(Block block){
         blockchain.add(block);
     }
 
+    /**
+     * Getter for all the blocks in the blockchain
+     * @return A list representing all the blocks in the blockchain
+     */
     public List<Block> getBlockchain(){
         return this.blockchain;
     }
