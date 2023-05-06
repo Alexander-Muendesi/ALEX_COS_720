@@ -26,11 +26,14 @@ public class Person {
     private String address = UUID.randomUUID().toString();
     private double money = 0.0;
     public double lastTransactionAmount = 0.0;
+    private CertificateAuthority ca;
+    private String digitalCertificate = "";
 
 
-    public Person(String name,SecureRandom secureRandom, Random random){
+    public Person(String name,SecureRandom secureRandom, Random random, CertificateAuthority ca){
         this.name = name;
         this.random = random;
+        this.ca = ca;
 
         peers = new ArrayList<String>();
         peersKey = new ArrayList<PublicKey>();
@@ -128,5 +131,40 @@ public class Person {
             e.printStackTrace();
         }
         return result;
+    }
+
+    /**
+     * This method verifies whether an individuals public key is from the person they claim to be by comparing the hash of the public key
+     * and the decrypted version of the digital certificate from the CA
+     * @param key The public key from the individual under consideration.
+     * @return True if the public key is authentic else false.
+     */
+    public Boolean verifyIndividualPublicKey(PublicKey key, String individualAddress){
+        byte[] keyBytes = key.getEncoded();
+        String data = Base64.getEncoder().encodeToString(keyBytes);
+        Sha256 hasher = new Sha256();
+
+
+        data = hasher.hash(data);
+        String result = "";
+
+        try{
+            // Cipher cipher = Cipher.getInstance("RSA");
+            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+            cipher.init(Cipher.DECRYPT_MODE, ca.getPublicKey());
+            byte[] decryptedData = cipher.doFinal(Base64.getDecoder().decode(ca.getIndividualCertificate(individualAddress)));
+            result = new String(decryptedData);
+            // result = Base64.getEncoder().encodeToString(decryptedData);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return (result.equals(data)) ? true : false;
+
+    }
+
+    public void applyForDigitalCertificate(String certificate){
+        this.digitalCertificate = certificate;
     }
 }

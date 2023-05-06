@@ -8,12 +8,14 @@ import java.util.UUID;
 import Blockchain.Block;
 import Blockchain.Blockchain;
 import Blockchain.Mempool;
+import Organization.CertificateAuthority;
 import Organization.Person;
 
 
 public class App {
     public static void main(String[] args) throws Exception {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        CertificateAuthority authority = new CertificateAuthority();
         //Initialization of blockchain and other small stuff
 
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");//pass this a parameter to Peers
@@ -36,9 +38,17 @@ public class App {
 
         Mempool mempool = new Mempool(blockchain.getBlockchain());//central mempool
 
-        Person alice = new Person("Alice", random, random2);
-        Person bob = new Person("Bob", random, random2);
-        Person peter = new Person("Peter", random, random2);
+        Person alice = new Person("Alice", random, random2, authority);
+        Person bob = new Person("Bob", random, random2, authority);
+        Person peter = new Person("Peter", random, random2, authority);
+
+        alice.applyForDigitalCertificate(authority.createCertificate(alice.getPublicKey(),alice.getAddress()));
+        bob.applyForDigitalCertificate(authority.createCertificate(bob.getPublicKey(),bob.getAddress()));
+        peter.applyForDigitalCertificate(authority.createCertificate(peter.getPublicKey(),peter.getAddress()));
+
+        System.out.println(alice.verifyIndividualPublicKey(bob.getPublicKey(),bob.getAddress()));
+        
+        /* 
 
         alice.addPeer(bob.getPublicKey(),bob.getAddress());
         alice.addPeer(peter.getPublicKey(), peter.getAddress());
@@ -100,7 +110,7 @@ public class App {
             counter++;
         }
         System.out.println("Is blockchain valid: " + blockchain.isChainValid());
-        System.out.println("Blockchain length: " + blockchain.getBlockchain().size());
+        System.out.println("Blockchain length: " + blockchain.getBlockchain().size());*/
 
     }
 }
