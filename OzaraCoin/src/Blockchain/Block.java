@@ -124,6 +124,7 @@ public class Block {
 
     /**
      * This method mines a new block. The goal is to find a hash that starts "difficulty" many 0's.
+     * Basically proof of work concept.
      */
     public int mineBlock(){
         //the process of creating a new block of transactions through solving a cryptographic puzzle.

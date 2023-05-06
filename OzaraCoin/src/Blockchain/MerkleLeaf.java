@@ -16,7 +16,6 @@ public class MerkleLeaf extends MerkleNode{
         this.transaction = transaction;
     }
 
-    //need to verify this method is being called and acting correctly for polymorphism
     public String getHash(){
         return transaction.getData();
     }
