@@ -2,8 +2,18 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+
 
 import Blockchain.Block;
 import Blockchain.Blockchain;
@@ -14,8 +24,9 @@ import Organization.Person;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        sendMail();
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-        CertificateAuthority authority = new CertificateAuthority();
+        /*CertificateAuthority authority = new CertificateAuthority();
         //Initialization of blockchain and other small stuff
 
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");//pass this a parameter to Peers
@@ -46,7 +57,7 @@ public class App {
         bob.applyForDigitalCertificate(authority.createCertificate(bob.getPublicKey(),bob.getAddress()));
         peter.applyForDigitalCertificate(authority.createCertificate(peter.getPublicKey(),peter.getAddress()));
 
-        System.out.println(alice.verifyIndividualPublicKey(bob.getPublicKey(),bob.getAddress()));
+        System.out.println(alice.verifyIndividualPublicKey(bob.getPublicKey(),bob.getAddress()));*/
         
         /* 
 
@@ -113,4 +124,79 @@ public class App {
         System.out.println("Blockchain length: " + blockchain.getBlockchain().size());*/
 
     }
+
+    public static void sendMail(){
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com"); // replace with your SMTP server
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.user", "burnerdevelopment8@gmail.com");
+        // props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        // props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        // props.put("mail.smtp.ssl.ciphersuites", "TLS_AES_128_GCM_SHA256");
+              
+        
+
+        Session session = Session.getDefaultInstance(props);
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("burnerdevelopment8@gmail.com")); // replace with your email address
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("burnerdevelopment8@gmail.com")); // replace with recipient email address
+            message.setSubject("Java Email Test");
+            message.setText("Hello from Java!");
+
+            // Send the email
+            Transport transport = session.getTransport("smtp");
+            transport.connect("smtp.gmail.com", "burnerdevelopment8@gmail.com", "ytdpcqxpvkqxfsgy"); // replace with your email address and password
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+
+            System.out.println("Email sent successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+//     private static void sendMail(){
+//         Properties props = new Properties();
+//         props.put("mail.smtp.host", "smtp.gmail.com"); // replace with your SMTP server
+//         props.put("mail.smtp.port", "587");
+//         props.put("mail.smtp.user", "burnerdevelopment8@gmail.com");
+
+//         props.put("mail.smtp.auth", "true");
+
+//         props.put("mail.smtp.starttls.enable", "true");
+         
+//         props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+//         props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+//         props.put("mail.smtp.ssl.ciphersuites", "TLS_AES_128_GCM_SHA256");
+      
+
+//         Session session = Session.getDefaultInstance(props);
+
+
+  
+//       try {
+//         Message message = new MimeMessage(session);
+//         message.setFrom(new InternetAddress("burnerdevelopment8@gmail.com")); // replace with your email address
+//         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("burnerdevelopment8@gmail.com")); // replace with recipient email address
+//         message.setSubject("Java Email Test");
+//         message.setText("Hello from Java!");
+
+//         // Send the email
+//         Transport transport = session.getTransport("smtp");
+//         transport.connect("smtp.gmail.com", "burnerdevelopment8@gmail.com", "ytdpcqxpvkqxfsgy"); // replace with your email address and password
+//         transport.sendMessage(message, message.getAllRecipients());
+//         transport.close();
+
+//         System.out.println("Email sent successfully.");
+//       } catch (Exception e) {
+//         e.printStackTrace();
+//       }  
+//    }  
+   //email: burnerdevelopment8@gmail.com
+   //password: QwertyAsdfg
+    
 }

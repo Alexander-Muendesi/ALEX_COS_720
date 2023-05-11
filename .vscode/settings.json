@@ -2,6 +2,8 @@
     "java.dependency.packagePresentation": "flat",
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "bcprov-jdk15on-1.70.jar"
+        "bcprov-jdk15on-1.70.jar",
+        "activation.jar",
+        "javax.mail-1.6.2.jar"
     ]
 }
