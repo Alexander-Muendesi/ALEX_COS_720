@@ -9,7 +9,7 @@ public class Block {
     private String prevHash;
 
     private MerkleTree tree;//this will have access to merkle root
-    private int difficulty;//for mining purposes
+    private int difficulty=1;//for mining purposes
 
     private Long timestamp;
     private int nonce;
@@ -18,6 +18,7 @@ public class Block {
     private List<Transaction> transactions;
 
     private final Sha256 hasher;
+    private final int MAX_DIFFICULTY = 10;
 
     /**
      * Constructor which takes as a parameter the previous hash of a block.
@@ -119,7 +120,7 @@ public class Block {
      * @param difficulty
      */
     public void setDifficulty(int difficulty){
-        this.difficulty = difficulty;
+        this.difficulty = (difficulty <= MAX_DIFFICULTY) ? difficulty : MAX_DIFFICULTY;
     }
 
     /**
