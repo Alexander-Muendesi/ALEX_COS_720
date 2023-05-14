@@ -1,8 +1,13 @@
 package Blockchain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+
+import Organization.Person;
+
+import java.util.Map;
 
 public class Block {
     private String hash;
@@ -19,6 +24,7 @@ public class Block {
 
     private final Sha256 hasher;
     private final int MAX_DIFFICULTY = 10;
+    private Map<String,Double> userMoney;
 
     /**
      * Constructor which takes as a parameter the previous hash of a block.
@@ -30,6 +36,7 @@ public class Block {
         this.nonce = 0;
         transactions = new ArrayList<Transaction>();
         hasher = new Sha256();
+        userMoney = new HashMap<String,Double>();
     }
 
     /**
@@ -129,15 +136,19 @@ public class Block {
      */
     public int mineBlock(){
         //the process of creating a new block of transactions through solving a cryptographic puzzle.
-        String target = new String(new char[difficulty]).replace('\n','0');
+        String target = "";
+        for(int i=0;i<difficulty;i++)
+            target += "0";
+
         while(!hash.substring(0,difficulty).equals(target)){
-            mininingCalculateHash();
             nonce++;
+            mininingCalculateHash();
         }
+        calculateUserMoney();
         System.out.println("Block mined!");
 
         Random random = new Random();
-        return random.nextInt(1, 150);//reward a miner with some cryptocurrency in the range 1-15
+        return random.nextInt(1, 2000);//reward a miner with some cryptocurrency in the range 1-15
     }
 
     /**
@@ -167,5 +178,38 @@ public class Block {
      */
     public List<Transaction> getTransactions(){
         return this.transactions;
+    }
+
+    public void calculateUserMoney(){
+        for(Transaction transaction: transactions){//calculate how much each person has received
+            if(userMoney.containsKey(transaction.getReceiver())){
+                userMoney.put(transaction.getReceiver(), userMoney.get(transaction.getReceiver()) + transaction.getAmount());
+            }
+            else{
+                userMoney.put(transaction.getReceiver(), transaction.getAmount());
+            }
+        }
+
+        /*for(Map.Entry<String,Person> entry: Mempool.registeredUsers.entrySet()){
+            System.out.println(entry.getKey() + " " + entry.getValue().getMoney());
+        }*/
+
+        for(Transaction transaction: transactions){//deduct what they have sent to other people to remain with actual balance
+            if(userMoney.containsKey(transaction.getSender())){
+                userMoney.put(transaction.getSender(), userMoney.get(transaction.getSender()) - transaction.getAmount());
+            }
+            else{//add a sender if they don't exist yet
+                if(Mempool.registeredUsers.containsKey(transaction.getSender()))
+                    userMoney.put(transaction.getSender(), Mempool.registeredUsers.get(transaction.getSender()).getMoney() - transaction.getAmount());
+            }
+        }
+
+        // for(Map.Entry<String,Double> entry: userMoney.entrySet()){
+        //     System.out.println(entry.getKey() + " " + entry.getValue());
+        // }
+    }
+
+    public double getUserMoney(String address){
+        return userMoney.get(address);
     }
 }

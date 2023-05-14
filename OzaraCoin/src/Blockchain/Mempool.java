@@ -2,15 +2,25 @@ package Blockchain;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import Organization.Person;
 
 public class Mempool {
     private List<Transaction> transactions;
     private List<Block> blockchain;
+    public static Map<String, Person> registeredUsers;//string= address
 
     public Mempool(List<Block> blockchain){
         this.transactions = new ArrayList<Transaction>();
         this.blockchain = blockchain;
+        registeredUsers = new HashMap<String,Person>();
+    }
+
+    public void addUser(Person person){
+        registeredUsers.put(person.getAddress(), person);
     }
 
     public boolean addTransaction(Transaction transaction){
@@ -52,7 +62,7 @@ public class Mempool {
             return false;
 
         //next we have to check whether the sender has enough funds to carry out the transaction. Need to implement tha UTXO class first though
-        double senderMoney = 0.0;
+        /*double senderMoney = 0.0;
         double senderSpentMoney = 0.0;
 
         String senderAddress = transaction.getSender();
@@ -65,6 +75,12 @@ public class Mempool {
             }
         }
         if(senderMoney - senderSpentMoney < transaction.getAmount())//check if the sender can afford to complete the transaction
+            return false;*/
+        
+        Person sender = registeredUsers.get(transaction.getSender());
+        if(sender.getMoney() >= transaction.getAmount())
+            sender.addMoney(-1 * transaction.getAmount());
+        else
             return false;
 
         //check for double spending

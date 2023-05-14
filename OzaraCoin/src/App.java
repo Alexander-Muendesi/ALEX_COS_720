@@ -25,7 +25,6 @@ import Organization.Person;
 public class App {
     public static void main(String[] args) throws Exception {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-        CertificateAuthority authority = new CertificateAuthority();
         //Initialization of blockchain and other small stuff
 
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");//pass this a parameter to Peers
@@ -47,19 +46,23 @@ public class App {
         blockchain.addBlock(genesisBlock);
 
         Mempool mempool = new Mempool(blockchain.getBlockchain());//central mempool
+        CertificateAuthority authority = new CertificateAuthority(mempool);
+
 
         Person alice = new Person("Alice", random, random2, authority);
-        System.out.println("User registered? : "+ authority.registerUser(alice.getAddress()));
-        /*Person bob = new Person("Bob", random, random2, authority);
+        System.out.println("Alice registered? : "+ authority.registerUser(alice));
+        Person bob = new Person("Bob", random, random2, authority);
+        System.out.println("Bob registered? : " + authority.registerUser(bob));
         Person peter = new Person("Peter", random, random2, authority);
+        System.out.println("Peter registered? : " + authority.registerUser(peter));
 
         alice.applyForDigitalCertificate(authority.createCertificate(alice.getPublicKey(),alice.getAddress()));
         bob.applyForDigitalCertificate(authority.createCertificate(bob.getPublicKey(),bob.getAddress()));
         peter.applyForDigitalCertificate(authority.createCertificate(peter.getPublicKey(),peter.getAddress()));
 
-        System.out.println(alice.verifyIndividualPublicKey(bob.getPublicKey(),bob.getAddress()));*/
+        System.out.println(alice.verifyIndividualPublicKey(bob.getPublicKey(),bob.getAddress()));
         
-        /* 
+        
 
         alice.addPeer(bob.getPublicKey(),bob.getAddress());
         alice.addPeer(peter.getPublicKey(), peter.getAddress());
@@ -76,14 +79,20 @@ public class App {
         genesisBlock.addTransaction(peter.getCoinbaseTransaction(pair.getPublic(), founderAddress));
 
         genesisBlock.calculateHash();
+
         genesisBlock.mineBlock();
+
+        //update users money based on the bootstrapped block
+        alice.addMoney(genesisBlock.getUserMoney(alice.getAddress()));
+        bob.addMoney(genesisBlock.getUserMoney(bob.getAddress()));
+        peter.addMoney(genesisBlock.getUserMoney(bob.getAddress()));
 
         int counter = 1;
         Block block = new Block(genesisBlock.getHash());
 
         //simulate some transactions between the users and adding of blocks to the blockchain
         while(counter <= 10000){
-            if(counter % 2000 == 0){
+            if(counter % 200 == 0){
                 //mine a block
                 System.out.println("Block size: " + mempool.geTransactions().size());
                 block.addTransactions(mempool.geTransactions());
@@ -91,12 +100,22 @@ public class App {
 
                 double reward = block.mineBlock();
                 int temp = random2.nextInt(3);
-                if(temp == 0)
+                if(temp == 0){
                     peter.addMoney(reward);
-                else if(temp == 1)
+                    System.out.println("Reward: " + reward);
+                    System.out.println("Peter money: " + peter.getMoney());
+                }
+                else if(temp == 1){
                     alice.addMoney(reward);
+                    System.out.println("Reward: " + reward);
+                    System.out.println("Alice money: " + alice.getMoney());
+                }
                 else
+                {
                     bob.addMoney(reward);
+                    System.out.println("Reward: " + reward);
+                    System.out.println("bob money: " + bob.getMoney());
+                }
 
                 mempool.removeTransactions();
                 blockchain.addBlock(block);
@@ -107,21 +126,21 @@ public class App {
 
                 if(tempIndex == 0){
                     boolean r = mempool.addTransaction(peter.createTransaction());
-                    if(r)peter.addMoney(peter.lastTransactionAmount * -1);
+                    // if(r)peter.addMoney(peter.lastTransactionAmount * -1);
                 }
                 else if(tempIndex == 1){
                     boolean r = mempool.addTransaction(alice.createTransaction());
-                    if(r)alice.addMoney(-1 * alice.lastTransactionAmount);
+                    // if(r)alice.addMoney(-1 * alice.lastTransactionAmount);
                 }
                 else if(tempIndex == 2){
                     boolean r = mempool.addTransaction(bob.createTransaction());
-                    if(r)bob.addMoney(bob.lastTransactionAmount * -1);  
+                    // if(r)bob.addMoney(bob.lastTransactionAmount * -1);  
                 }
             }
             counter++;
         }
         System.out.println("Is blockchain valid: " + blockchain.isChainValid());
-        System.out.println("Blockchain length: " + blockchain.getBlockchain().size());*/
+        System.out.println("Blockchain length: " + blockchain.getBlockchain().size());
 
     }
 

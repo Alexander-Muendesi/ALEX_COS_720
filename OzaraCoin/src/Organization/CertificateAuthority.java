@@ -11,17 +11,20 @@ import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 
+import Blockchain.Mempool;
 import Blockchain.Sha256;
 
 public class CertificateAuthority {
     private Sha256 sha256; 
     private KeyPair pair;
     private Map<String, String> subscribers;
+    private Mempool mempool;
     
-    public CertificateAuthority(){
+    public CertificateAuthority(Mempool mempool){
         sha256 = new Sha256();
         pair = null;
         subscribers = new HashMap<String,String>();
+        this.mempool = mempool;
 
         try {
             KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
@@ -84,8 +87,8 @@ public class CertificateAuthority {
             return null;
     }
 
-    public boolean registerUser(String address){
-        TwoFactorAuthentication twoFA = TwoFactorAuthentication.generateCode();
+    public boolean registerUser(Person person){
+        /*TwoFactorAuthentication twoFA = TwoFactorAuthentication.generateCode();
         System.out.println("Enter email address: ");
         Scanner input = new Scanner(System.in);
 
@@ -107,9 +110,13 @@ public class CertificateAuthority {
         String code = input.nextLine();
 
         boolean result = false;
-        if(codePattern.matcher(code).matches() && twoFA.isValid() && code.equals(String.valueOf(twoFA.getCode())));
+        if(codePattern.matcher(code).matches() && twoFA.isValid() && code.equals(String.valueOf(twoFA.getCode()))){
             result = true;
+            mempool.addUser(person);
+        }*/
+        mempool.addUser(person);
         
-        return result;
+        // return result;
+        return true;
     }
 }
