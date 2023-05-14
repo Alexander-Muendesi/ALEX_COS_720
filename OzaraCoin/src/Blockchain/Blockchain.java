@@ -43,12 +43,15 @@ public class Blockchain {
                 prev = b;
             }
         }
-
         counter = 0;
         //step 2
         for(Block block: blockchain){
             if(counter !=0){
-                String target = new String(new char[block.getDifficulty()]).replace('\n','0');
+                // String target = new String(new char[block.getDifficulty()]).replace('\n','0');
+                String target = "";
+                for(int i=0;i<block.getDifficulty();i++)
+                    target += "0";
+
                 int nonce = 0;
                 String data = block.getPrevHash() + block.getTree().getRootHash() + block.getTimeStamp() + nonce;
                 String hash = sha256.hash(data);
@@ -66,7 +69,6 @@ public class Blockchain {
             else
                 counter++;
         }
-
         //step 3: Done when transactions are being added to the block
         
         //step 4: Done already in mempool
