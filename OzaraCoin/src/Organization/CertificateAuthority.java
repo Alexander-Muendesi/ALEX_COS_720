@@ -6,6 +6,8 @@ import java.security.PublicKey;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 
@@ -80,5 +82,34 @@ public class CertificateAuthority {
         }
         else
             return null;
+    }
+
+    public boolean registerUser(String address){
+        TwoFactorAuthentication twoFA = TwoFactorAuthentication.generateCode();
+        System.out.println("Enter email address: ");
+        Scanner input = new Scanner(System.in);
+
+        Pattern emailPattern = Pattern.compile("^[a-zA-Z0-9_.+-]+@gmail\\.com$");
+        String email= "";
+        for(int i=0;i<5;i++){//give a maximum of chances for user to enter correct email address according to regex
+            email = input.nextLine();
+
+            if(emailPattern.matcher(email).matches())
+                break;
+
+            else if(emailPattern.matcher(email).matches() == false && i == 4)
+                return false;
+        }
+
+        twoFA.sendCode(email);
+        Pattern codePattern = Pattern.compile("^\\d{6}$");
+        System.out.println("Enter code: ");
+        String code = input.nextLine();
+
+        boolean result = false;
+        if(codePattern.matcher(code).matches() && twoFA.isValid() && code.equals(String.valueOf(twoFA.getCode())));
+            result = true;
+        
+        return result;
     }
 }

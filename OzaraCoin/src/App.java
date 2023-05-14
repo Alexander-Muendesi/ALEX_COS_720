@@ -24,9 +24,8 @@ import Organization.Person;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        sendMail();
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-        /*CertificateAuthority authority = new CertificateAuthority();
+        CertificateAuthority authority = new CertificateAuthority();
         //Initialization of blockchain and other small stuff
 
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");//pass this a parameter to Peers
@@ -50,7 +49,8 @@ public class App {
         Mempool mempool = new Mempool(blockchain.getBlockchain());//central mempool
 
         Person alice = new Person("Alice", random, random2, authority);
-        Person bob = new Person("Bob", random, random2, authority);
+        System.out.println("User registered? : "+ authority.registerUser(alice.getAddress()));
+        /*Person bob = new Person("Bob", random, random2, authority);
         Person peter = new Person("Peter", random, random2, authority);
 
         alice.applyForDigitalCertificate(authority.createCertificate(alice.getPublicKey(),alice.getAddress()));
@@ -144,7 +144,7 @@ public class App {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("burnerdevelopment8@gmail.com")); // replace with your email address
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("burnerdevelopment8@gmail.com")); // replace with recipient email address
-            message.setSubject("Java Email Test");
+            message.setSubject("Java Email Test 2");
             message.setText("Hello from Java!");
 
             // Send the email
@@ -197,6 +197,6 @@ public class App {
 //       }  
 //    }  
    //email: burnerdevelopment8@gmail.com
-   //password: QwertyAsdfg
+   
     
 }
