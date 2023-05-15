@@ -41,7 +41,7 @@ public class App {
         }
         String founderAddress = UUID.randomUUID().toString();
 
-        Block genesisBlock = new Block("Genesis");
+        Block genesisBlock = new Block("Genesis",1);
         Blockchain blockchain = new Blockchain();//create a central blockchain
         blockchain.addBlock(genesisBlock);
 
@@ -88,13 +88,13 @@ public class App {
         peter.addMoney(genesisBlock.getUserMoney(bob.getAddress()));
 
         int counter = 1;
-        Block block = new Block(genesisBlock.getHash());
+        Block block = new Block(genesisBlock.getHash(), blockchain.getBlockchainLength());
 
         //simulate some transactions between the users and adding of blocks to the blockchain
         while(counter <= 10000){
             if(counter % 200 == 0){
                 //mine a block
-                System.out.println("Block size: " + mempool.geTransactions().size());
+                System.out.println("Number of transactions in block: " + mempool.geTransactions().size());
                 block.addTransactions(mempool.geTransactions());
                 block.calculateHash();
 
@@ -119,7 +119,8 @@ public class App {
 
                 mempool.removeTransactions();
                 blockchain.addBlock(block);
-                block = new Block(block.getHash());
+                block = new Block(block.getHash(), blockchain.getBlockchainLength());
+                System.out.println();
             }
             else{//simulate creation of transactions
                 int tempIndex = random.nextInt(3);

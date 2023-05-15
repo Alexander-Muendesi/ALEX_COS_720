@@ -28,6 +28,18 @@ public class Person {
     public double lastTransactionAmount = 0.0;
     private CertificateAuthority ca;
     private String digitalCertificate = "";
+    public  static double accountNonce = 1.0;//a nonce used to prevent double spending
+
+    /**
+     * 
+     * @return true if the maximum value of the double has not been reached else false
+     */
+    public static void incrementAccountNonce(){
+        if(accountNonce == Double.MAX_VALUE){
+            accountNonce = 1.0;
+        }
+        accountNonce++;
+    }
 
 
     public Person(String name,SecureRandom secureRandom, Random random, CertificateAuthority ca){
@@ -77,7 +89,7 @@ public class Person {
         String transactionSignature = generateTransactionSignature(Double.toString(amount), transactionId, 
                 this.address, receiverAddress);
 
-        Transaction t = new Transaction(amount, transactionId, transactionSignature, senderPublicKey, receiverKey, this.address,receiverAddress);
+        Transaction t = new Transaction(amount, transactionId, transactionSignature, senderPublicKey, receiverKey, this.address,receiverAddress,accountNonce);
         return t;
 
     }
@@ -95,7 +107,7 @@ public class Person {
         String transactionSignature = generateTransactionSignature(Double.toString(amount), transactionId, 
                 senderAddress, receiverAddress);
 
-        Transaction t = new Transaction(amount, transactionId, transactionSignature, senderPublicKey, this.getPublicKey(),senderAddress,receiverAddress);
+        Transaction t = new Transaction(amount, transactionId, transactionSignature, senderPublicKey, this.getPublicKey(),senderAddress,receiverAddress,0.0);
         return t;
     }
 

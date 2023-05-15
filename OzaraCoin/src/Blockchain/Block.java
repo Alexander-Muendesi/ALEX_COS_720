@@ -30,13 +30,16 @@ public class Block {
      * Constructor which takes as a parameter the previous hash of a block.
      * @param prevHash
      */
-    public Block(String prevHash){
+    public Block(String prevHash, int blockchainLength){
         this.prevHash = prevHash;
         timestamp = System.currentTimeMillis();
         this.nonce = 0;
         transactions = new ArrayList<Transaction>();
         hasher = new Sha256();
         userMoney = new HashMap<String,Double>();
+
+        int val = ((int)Math.floor(blockchainLength/10000));
+        this.difficulty = Math.min(10, val);
     }
 
     /**

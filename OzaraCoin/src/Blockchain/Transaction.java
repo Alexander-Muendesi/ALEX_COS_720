@@ -24,6 +24,7 @@ public class Transaction {
     private final String transactionSignature;
     private final PublicKey senderPublicKey;
     private final PublicKey receiverPublicKey;
+    private final double transactionNonce;
 
     /**
      * 
@@ -34,9 +35,10 @@ public class Transaction {
      * @param receiverPublicKey
      * @param senderAddress
      * @param receiverAddress
+     * @param transactionNonce
      */
     public Transaction(double amount, String transactionId,String transactionSignature, 
-                        PublicKey senderPublicKey, PublicKey receiverPublicKey, String senderAddress, String receiverAddress){
+                        PublicKey senderPublicKey, PublicKey receiverPublicKey, String senderAddress, String receiverAddress, double transactionNonce){
         // this.sender = sender;
         this.sender = senderAddress;
         // this.receiver = receiver;
@@ -48,7 +50,12 @@ public class Transaction {
 
         this.senderPublicKey = senderPublicKey;
         this.receiverPublicKey = receiverPublicKey;
+        this.transactionNonce = transactionNonce;
 
+    }
+
+    public double getTransactionNonce(){
+        return this.transactionNonce;
     }
 
     public String getSender(){

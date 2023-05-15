@@ -90,4 +90,8 @@ public class Blockchain {
     public List<Block> getBlockchain(){
         return this.blockchain;
     }
+
+    public int getBlockchainLength(){
+        return this.blockchain.size();
+    }
 }
