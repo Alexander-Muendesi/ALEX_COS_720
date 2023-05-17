@@ -52,7 +52,6 @@ public class Person {
 
         try {
             keygen = KeyPairGenerator.getInstance("RSA");
-            // keygen.initialize(1024,secureRandom);
             keygen.initialize(2048);
             pair = keygen.genKeyPair();
         } catch (Exception e) {
@@ -132,11 +131,9 @@ public class Person {
         String result = "";
 
         try{
-            // Cipher cipher = Cipher.getInstance("RSA");
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, pair.getPrivate());
             byte[] encryptedData = cipher.doFinal(data.getBytes());
-            // result = new String(encryptedData);
             result = Base64.getEncoder().encodeToString(encryptedData);
         }
         catch(Exception e){
@@ -161,12 +158,10 @@ public class Person {
         String result = "";
 
         try{
-            // Cipher cipher = Cipher.getInstance("RSA");
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.DECRYPT_MODE, ca.getPublicKey());
             byte[] decryptedData = cipher.doFinal(Base64.getDecoder().decode(ca.getIndividualCertificate(individualAddress)));
             result = new String(decryptedData);
-            // result = Base64.getEncoder().encodeToString(decryptedData);
         }
         catch(Exception e){
             e.printStackTrace();

@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-
-import Organization.Person;
-
 import java.util.Map;
 
 public class Block {
@@ -193,10 +190,6 @@ public class Block {
             }
         }
 
-        /*for(Map.Entry<String,Person> entry: Mempool.registeredUsers.entrySet()){
-            System.out.println(entry.getKey() + " " + entry.getValue().getMoney());
-        }*/
-
         for(Transaction transaction: transactions){//deduct what they have sent to other people to remain with actual balance
             if(userMoney.containsKey(transaction.getSender())){
                 userMoney.put(transaction.getSender(), userMoney.get(transaction.getSender()) - transaction.getAmount());
@@ -207,9 +200,6 @@ public class Block {
             }
         }
 
-        // for(Map.Entry<String,Double> entry: userMoney.entrySet()){
-        //     System.out.println(entry.getKey() + " " + entry.getValue());
-        // }
     }
 
     public double getUserMoney(String address){

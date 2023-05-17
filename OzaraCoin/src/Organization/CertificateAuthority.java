@@ -51,11 +51,9 @@ public class CertificateAuthority {
         String result = "Error";
 
         try{
-            // Cipher cipher = Cipher.getInstance("RSA");
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, pair.getPrivate());
             byte[] encryptedData = cipher.doFinal(data.getBytes());
-            // result = new String(encryptedData);
             result = Base64.getEncoder().encodeToString(encryptedData);
         }
         catch(Exception e){
@@ -88,20 +86,24 @@ public class CertificateAuthority {
     }
 
     public boolean registerUser(Person person){
-        /*TwoFactorAuthentication twoFA = TwoFactorAuthentication.generateCode();
-        System.out.println("Enter email address: ");
+        TwoFactorAuthentication twoFA = TwoFactorAuthentication.generateCode();
+        System.out.println("Enter an email address from gmail or tuks: ");
         Scanner input = new Scanner(System.in);
 
         Pattern emailPattern = Pattern.compile("^[a-zA-Z0-9_.+-]+@gmail\\.com$");
+        Pattern emailPattern2 = Pattern.compile("^([a-zA-Z0-9_.+-]+)@tuks.co.za$");
+
         String email= "";
         for(int i=0;i<5;i++){//give a maximum of chances for user to enter correct email address according to regex
             email = input.nextLine();
 
-            if(emailPattern.matcher(email).matches())
+            if(emailPattern.matcher(email).matches() || emailPattern2.matcher(email).matches())
                 break;
 
             else if(emailPattern.matcher(email).matches() == false && i == 4)
                 return false;
+                
+            System.out.println("Please try again");
         }
 
         twoFA.sendCode(email);
@@ -113,10 +115,8 @@ public class CertificateAuthority {
         if(codePattern.matcher(code).matches() && twoFA.isValid() && code.equals(String.valueOf(twoFA.getCode()))){
             result = true;
             mempool.addUser(person);
-        }*/
-        mempool.addUser(person);
+        }
         
-        // return result;
-        return true;
+        return result;
     }
 }
