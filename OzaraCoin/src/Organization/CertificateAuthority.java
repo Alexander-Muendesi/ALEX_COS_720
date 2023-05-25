@@ -87,20 +87,22 @@ public class CertificateAuthority {
 
     public boolean registerUser(Person person){
         TwoFactorAuthentication twoFA = TwoFactorAuthentication.generateCode();
-        System.out.println("Enter an email address from gmail or tuks: ");
+        System.out.println("Enter an email address that ends with @gmail.com or @tuks.co.za or @cs.up.ac.za: ");
         Scanner input = new Scanner(System.in);
 
         Pattern emailPattern = Pattern.compile("^[a-zA-Z0-9_.+-]+@gmail\\.com$");
         Pattern emailPattern2 = Pattern.compile("^([a-zA-Z0-9_.+-]+)@tuks.co.za$");
+        Pattern emailPattern3 = Pattern.compile("^([a-zA-Z0-9_.+-]+)@cs.up.ac.za$");
 
         String email= "";
         for(int i=0;i<5;i++){//give a maximum of chances for user to enter correct email address according to regex
             email = input.nextLine();
 
-            if(emailPattern.matcher(email).matches() || emailPattern2.matcher(email).matches())
+            if(emailPattern.matcher(email).matches() || emailPattern2.matcher(email).matches() || emailPattern3.matcher(email).matches())
                 break;
 
-            else if(emailPattern.matcher(email).matches() == false && i == 4)
+            else if(i==4 && emailPattern.matcher(email).matches() == false &&
+                    emailPattern2.matcher(email).matches() == false && emailPattern3.matcher(email).matches() == false)
                 return false;
                 
             System.out.println("Please try again");
