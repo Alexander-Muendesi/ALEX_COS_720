@@ -60,7 +60,7 @@ public class TwoFactorAuthentication {
 
             // Send the email
             Transport transport = session.getTransport("smtp");
-            transport.connect("smtp.gmail.com", "burnerdevelopment8@gmail.com", "ytdpcqxpvkqxfsgy"); // replace with your email address and password
+            transport.connect("smtp.gmail.com", "", ""); // replace with your email address and gmail app key which can be created using 2FA in security
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
 
